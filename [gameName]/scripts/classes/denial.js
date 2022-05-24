@@ -35,6 +35,7 @@ class Denial extends Phaser.Physics.Arcade.Sprite {
         _scene.add.existing(this.beam);
         _scene.physics.add.existing(this.beam);
         this.beam.setGravityY(-g);
+        this.beam.setSize(6400,64);
 
         console.log(this.beam);
 
@@ -145,12 +146,12 @@ class Denial extends Phaser.Physics.Arcade.Sprite {
                 if (this.initialFlip) {
                     this.beam.setOrigin(0, 0);
                     this.beam.x = this.x + 128 + this.offsetX;
-                    this.beam.y = this.y + this.offsetY;
+                    this.beam.y = this.y + this.offsetY -32;
                 }
                 else {
                     this.beam.setOrigin(1, 0);
                     this.beam.x = this.x + this.offsetX;
-                    this.beam.y = this.y + this.offsetY;
+                    this.beam.y = this.y + this.offsetY-32;
                 }
             }
             else {
@@ -169,12 +170,12 @@ class Denial extends Phaser.Physics.Arcade.Sprite {
             if (this.initialFlip) {
                 this.beam.setOrigin(0, 0);
                 this.beam.x = this.x + 128 + this.offsetX;
-                this.beam.y = this.y + this.offsetY;
+                this.beam.y = this.y + this.offsetY-32;
             }
             else {
                 this.beam.setOrigin(1, 0);
                 this.beam.x = this.x + this.offsetX;
-                this.beam.y = this.y + this.offsetY;
+                this.beam.y = this.y + this.offsetY-32;
             }
         }
     }

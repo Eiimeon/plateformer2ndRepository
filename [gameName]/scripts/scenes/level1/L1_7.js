@@ -23,7 +23,7 @@ class L1_7 extends levelScene {
 
         this.denialSpawns = MAP.getObjectLayer('denialSpawns').objects
         console.log(this.denialSpawns[0]);
-        this.denial = new Denial(this, this.denialSpawns[0].x, this.denialSpawns[0].y, 'denial', false, [1, 1, 0, 0]);
+        this.denial = new Denial(this, this.denialSpawns[0].x, this.denialSpawns[0].y, 'denial', false, [0, 1, 0, 0]);
 
         var _denialTriggers0 = this.physics.add.group({ allowGravity: false, immovable: true });
         MAP.getObjectLayer('denialTriggers0').objects.forEach(function (currTrigger) { _denialTriggers0.create(currTrigger.x, currTrigger.y - 64, 'transparent').setOrigin(0); });
