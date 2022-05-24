@@ -1157,13 +1157,13 @@
          "name":"denialSpawns",
          "objects":[
                 {
-                 "height":64,
-                 "id":2,
+                 "height":0,
+                 "id":17,
                  "name":"",
                  "rotation":0,
                  "type":"",
                  "visible":true,
-                 "width":64,
+                 "width":0,
                  "x":3136,
                  "y":1024
                 }],
@@ -1304,7 +1304,7 @@
          "y":0
         }],
  "nextlayerid":43,
- "nextobjectid":14,
+ "nextobjectid":18,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.8.4",

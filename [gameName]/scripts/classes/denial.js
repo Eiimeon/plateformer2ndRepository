@@ -8,8 +8,13 @@ class Denial extends Phaser.Physics.Arcade.Sprite {
         this.body.setImmovable(true);
         //this.body.setGravity(0, -g);
         this.setOrigin(0, 0);
+        // this.setSize(64, 128);
         //this.setSize(350,896);
         //this.setScale(1/7);
+
+        // this.setScale(1 / 4)
+        // this.setSize(64 * 4, 128 * 4);
+        // this.body.setOffset(64 * 4, 2.5 * 4 * 64);
 
         this.scene = _scene;
 
@@ -18,6 +23,8 @@ class Denial extends Phaser.Physics.Arcade.Sprite {
 
         this.x0 = _x;
         this.y0 = _y;
+
+
         this.on = true;
 
         this.beam = new Phaser.Physics.Arcade.Sprite(_scene, 0, 0, 'beam').setOrigin(0, 0);
@@ -35,7 +42,9 @@ class Denial extends Phaser.Physics.Arcade.Sprite {
             }
         });
 
-        console.log('denial construit')
+        console.log('denial construit');
+        console.log(this.x);
+        console.log(this.y);
     }
 
     flipped(flip) {
@@ -53,10 +62,10 @@ class Denial extends Phaser.Physics.Arcade.Sprite {
     stop() {
         this.on = false;
         this.y = -64;
-//        this.beam.y = -64;
+        //        this.beam.y = -64;
         this.setGravityY(-g);
     }
-    
+
     kill() {
         this.on = false;
         this.y = -64;
@@ -67,9 +76,12 @@ class Denial extends Phaser.Physics.Arcade.Sprite {
     restart() {
         this.on = true;
         this.y = this.y0;
+        this.x = this.x0;
         this.beam.y = -64;
         this.setGravityY(0);
-//        this.forceTick();
+        console.log(this.x);
+        console.log(this.y);
+
     }
 
     denialTick(BC) {
@@ -95,8 +107,10 @@ class Denial extends Phaser.Physics.Arcade.Sprite {
             }
         }
     }
-    
+
     forceTick() {
+        // this.x = this.x0;
+        // this.y = this.y0;
         if (this.on) {
             this.setAsFlipped(this.initialFlip);
             if (this.initialFlip) {
@@ -109,6 +123,41 @@ class Denial extends Phaser.Physics.Arcade.Sprite {
                 this.beam.x = this.x;
                 this.beam.y = this.y;
             }
+        }
+    }
+
+    // ### Déplacements pour cinématiques ###
+
+    move(input) {
+        switch (input) {
+
+            case 'right':
+                this.setVelocityX(500);
+                break;
+
+            case 'left':
+                this.setVelocityX(-500);
+                break;
+
+            case 'immobile':
+                this.setVelocityX(0);
+                break;
+        }
+    }
+
+    jump(input) {
+        if (this.body.onFloor()) {
+            this.jumpAllowed = true;
+        }
+        if (input == 'held' && this.jumpAllowed) {
+            this.jumpAllowed = false;
+            this.setVelocityY(-850);
+        }
+        if (!this.body.blocked.down && input != 'held' && this.body.velocity.y < 0) {
+            this.setVelocityY(0);
+        }
+        if (this.body.velocity.y > 600) { // Vitesse terminale
+            this.setVelocityY(500);
         }
     }
 }

@@ -7,7 +7,7 @@ class L1_6 extends levelScene {
                 default: 'arcade',
                 arcade: {
                     gravity: { y: g },
-//                    debug: true
+                    // debug: true
                 }
             }
         })
@@ -29,14 +29,15 @@ class L1_6 extends levelScene {
         MAP.getObjectLayer('denialTriggers').objects.forEach(function (currTrigger) { _denialTriggers.create(currTrigger.x, currTrigger.y - 64, 'transparent').setOrigin(0); });
         this.denialTriggers = _denialTriggers;
 
+        this.add.image(0, 0, 'blueFilter').setOrigin(0).setScrollFactor(0);
 
         this.physics.add.overlap(this.player, this.denialTriggers, () => {
             this.denial.kill();
         })
     }
 
-    update(time,delta) {
-        this.standardUpdate(time,delta);
+    update(time, delta) {
+        this.standardUpdate(time, delta);
     }
 
 }

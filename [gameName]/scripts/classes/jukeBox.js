@@ -31,14 +31,14 @@ class JukeBox {
         this._cursedHappy.push(new MusicObj(musicScene, 'cursedH5'));
         this._cursedHappy.push(new MusicObj(musicScene, 'cursedH6'));
 
+        this.choice = [new MusicObj(musicScene, 'choice', 32)];
+        this.choice[0].sound.setVolume(0.5);
+
         // this._cursedHappy.forEach((musicObj) => {
         //     musicObj.randDetune();
         // })
 
         this._music = this._happy;
-
-        
-
 
         this.currMusic = this._music[0];
         this.currMusicBeatCount = 1;

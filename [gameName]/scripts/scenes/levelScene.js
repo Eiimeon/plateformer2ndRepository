@@ -172,12 +172,15 @@ class levelScene extends Phaser.Scene {
 
         // Autres
 
-        this.physics.add.overlap(this.player, this.checkpoints, (currPlayer) => {
+        this.physics.add.overlap(this.player, this.checkpoints, () => {
             //currPlayer.spawnIndex += 1;
             //currPlayer.die();
             if (true) {
                 console.log(((parseInt(this.scene.key[3]) + 1) % NLEVELS1PARTS));
-                this.scene.start('L1_' + ((parseInt(this.scene.key[3]) + 1) % NLEVELS1PARTS), this.musicScene);
+                let nextIndex = 1 + LEVELORDER.findIndex((element) => {
+                    return ('L1_' + element == this.scene.key);
+                });
+                this.scene.start('L1_' + (LEVELORDER[nextIndex]), this.musicScene);
             }
         });
     }
@@ -230,10 +233,10 @@ class levelScene extends Phaser.Scene {
 
         // Overlays
 
-        if (this.musicScene.seenCinematic1_5) {
-            console.log('filtre bleu');
-            this.add.image(0,0,'blueFilter').setOrigin(0).setScrollFactor(0);
-        }
+        // if (this.musicScene.seenCinematic1_5) {
+        //     console.log('filtre bleu');
+        //     this.add.image(0, 0, 'blueFilter').setOrigin(0).setScrollFactor(0);
+        // }
 
 
         // Camera

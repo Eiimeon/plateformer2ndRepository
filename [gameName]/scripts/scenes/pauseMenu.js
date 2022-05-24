@@ -3,9 +3,6 @@ class PauseMenu extends Phaser.Scene {
         super({
             key: 'PauseMenu',
         })
-        console.log('Pause menu contruit');
-
-        
     }
 
     resumeGame() {

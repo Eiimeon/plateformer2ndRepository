@@ -9,6 +9,12 @@ class StartScreen extends Phaser.Scene {
     preload() {
         this.load.image('titleScreen', 'assets/images/titleScreen.png');
         this.load.image('pause', 'assets/images/pause.png');
+        this.load.image('controls', 'assets/images/controls.png');
+        this.load.image('controlsNoFrame', 'assets/images/controlsNoFrame.png');
+        this.load.image('fin1', 'assets/images/fin1.png');
+        this.load.image('fin2', 'assets/images/fin2.png');
+        this.load.image('credits', 'assets/images/credits.png');
+
 
         // Maps Level 1
         this.load.tilemapTiledJSON('L1_0', 'assets/images/map/L1_0.tmj');
@@ -26,6 +32,7 @@ class StartScreen extends Phaser.Scene {
 
         this.load.spritesheet('runSheet', 'assets/images/runAnimTestSheet.png', { frameWidth: 1000, frameHeight: 1270 });
         this.load.spritesheet('slimeSheet', 'assets/images/chara2ToSpriteSheet.png', { frameWidth: 774, frameHeight: 1554 });
+        this.load.spritesheet('denialSlimeSheet', 'assets/images/denialToSpriteSheet.png', { frameWidth: 774, frameHeight: 1554 });
 
         this.load.image('fond', 'assets/images/protoFond.png');
         this.load.video('audioVizHappy','assets/videos/audioVizHappyLowD.mp4');
@@ -33,14 +40,19 @@ class StartScreen extends Phaser.Scene {
         this.load.image('rose','assets/images/levelBGs/rose.png');
 
 
-        for (let i = 0 ; i<9 ; i++) {
-            this.load.image('parallaxL1_'+i, 'assets/images/levelBGs/parallax1_'+i+'.png');
-            this.load.image('parallax2_L1_'+i, 'assets/images/levelBGs/parallax2_1_'+i+'.png');
+        for (let i = 0 ; i<10 ; i++) {
+            if ( i != 6 ) {
+                this.load.image('parallaxL1_'+i, 'assets/images/levelBGs/parallax1_'+i+'.png');
+                this.load.image('parallax2_L1_'+i, 'assets/images/levelBGs/parallax2_1_'+i+'.png');
+            }
         }
 
         this.load.image('overlay1_9', 'assets/images/overlay1_9.png');
         this.load.image('fond1_9', 'assets/images/fond1_9.png');
         this.load.image('blueFilter', 'assets/images/blueFilter.png');
+        this.load.image('blackStrip', 'assets/images/blackStrip.png');
+
+        
 
 
         this.load.image('bSquare', 'assets/images/bSquare.png');
@@ -69,6 +81,8 @@ class StartScreen extends Phaser.Scene {
         this.load.audio('cursedH4', 'assets/musiques/curseH4.mp3');
         this.load.audio('cursedH5', 'assets/musiques/curseH5.mp3');
         this.load.audio('cursedH6', 'assets/musiques/curseH6.mp3');
+
+        this.load.audio('choice', 'assets/musiques/choice.mp3');
 
         this.load.audio('pauseMajor', 'assets/musiques/pauseMajeur.mp3');
         this.load.audio('pauseMinor', 'assets/musiques/pauseMineur.mp3');

@@ -6,14 +6,16 @@ class MusicAndData extends Phaser.Scene {
         this.seenCinematic1_5 = false ;
         this.playingCinematic1_5 = false ;
 
+        this.seenCinematic1_8 = false ;
+
     }
 
     preload() { }
 
     create() {
         
-        this.scene.run(STARTLEVELKEY,this);
-        this.levelScene = this.scene.get(STARTLEVELKEY);
+        this.scene.run('L1_'+LEVELORDER[STARTLEVELINDEX],this);
+        this.levelScene = this.scene.get('L1_'+LEVELORDER[STARTLEVELINDEX]);
 
         this.jukebox = new JukeBox(this,this.levelScene);
         this.jukebox.start();
@@ -27,8 +29,6 @@ class MusicAndData extends Phaser.Scene {
         this.videoBG.play();
         this.videoBG.loop = true;
         this.add.image(0,0,'rose').setOrigin(0,0).setScrollFactor(0);
-
-        
     }
 
     update() {

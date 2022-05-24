@@ -3,7 +3,7 @@ Classe : Personnage
 ##################################################################################################################################################*/
 class Chara extends Phaser.Physics.Arcade.Sprite {
 
-    constructor(_scene, _x = 64, _y = 64, _keyCache, arms) {
+    constructor(_scene, _x = 64, _y = 64, _keyCache) {
         super(_scene, _x, _y, _keyCache);
 
         _scene.add.existing(this);
@@ -38,53 +38,17 @@ class Chara extends Phaser.Physics.Arcade.Sprite {
         this.dashSpeed = 1000;
         this.dashDuration = 200;
 
-        // Animations
-        // this.anims.create({
-        //     key: 'walk',
-        //     frames: this.anims.generateFrameNumbers('runSheet', { frames: [0, 1, 2, 3, 4, 5] }),
-        //     frameRate: 8,
-        //     repeat: -1
-        // })
-
-        // this.anims.create({
-        //     key: 'idle',
-        //     frames: this.anims.generateFrameNumbers('runSheet', { frames: [6] }),
-        //     frameRate: 8,
-        //     repeat: -1
-        // })
-
-        // this.anims.create({
-        //     key: 'jumpUp',
-        //     frames: this.anims.generateFrameNumbers('runSheet', { frames: [7] }),
-        //     frameRate: 8,
-        //     repeat: -1
-        // })
-
-        // this.anims.create({
-        //     key: 'jumpDown',
-        //     frames: this.anims.generateFrameNumbers('runSheet', { frames: [8] }),
-        //     frameRate: 8,
-        //     repeat: -1
-        // })
-
-        // this.anims.create({
-        //     key: 'jumpPeak',
-        //     frames: this.anims.generateFrameNumbers('runSheet', { frames: [8] }),
-        //     frameRate: 8,
-        //     repeat: -1
-        // })
-
         this.anims.create({
             key: 'walk',
-            frames: this.anims.generateFrameNumbers('slimeSheet', { frames: [0] }),
+            frames: this.anims.generateFrameNumbers('slimeSheet', { frames: [10,10,0,0] }),
             frameRate: 8,
             repeat: -1
         })
 
         this.anims.create({
             key: 'idle',
-            frames: this.anims.generateFrameNumbers('slimeSheet', { frames: [0] }),
-            frameRate: 16,
+            frames: this.anims.generateFrameNumbers('slimeSheet', { frames: [0,0,10,10] }),
+            frameRate: 4,
             repeat: -1
         })
 
@@ -200,7 +164,7 @@ class Chara extends Phaser.Physics.Arcade.Sprite {
                         }
                     }
                     else {
-                        this.play('idle');
+                        this.play('idle',true);
                     }
                 }
                 else {
@@ -217,7 +181,6 @@ class Chara extends Phaser.Physics.Arcade.Sprite {
                     this.play('jumpPeak', true);
                     this.anims.chain('jumpDown');
                 }
-
             }
         }
     }
@@ -251,11 +214,6 @@ class Chara extends Phaser.Physics.Arcade.Sprite {
     }
 
     diePt2() {
-        try {
-            this.scene.denial.kill();
-            this.scene.denial.restart();
-        }
-        catch (error) { };
         this.setGravityY(0);
         this.play('idle');
         this.x = this.scene.spawns[this.spawnIndex].x - 64;
@@ -264,8 +222,11 @@ class Chara extends Phaser.Physics.Arcade.Sprite {
         this.scene.cameras.main.fadeIn(1000);
         this.dead = false;
 
-        try { this.scene.denial.restart(); }
-        catch (error) { }
+        try {
+            this.scene.denial.kill();
+            this.scene.denial.restart();
+        }
+        catch (error) { };
     }
 
 

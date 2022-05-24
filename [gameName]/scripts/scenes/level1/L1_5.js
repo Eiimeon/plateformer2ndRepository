@@ -43,7 +43,6 @@ class L1_5 extends levelScene {
 
     step2() {
         
-
         this.player.setVelocityX(0);
         this.player.play('jumpDown');
         //this.musicScene.jukebox.currMusic.pause();
@@ -53,6 +52,8 @@ class L1_5 extends levelScene {
         this.denial = new Denial(this, this.denialSpawns[0].x, this.denialSpawns[0].y, 'denial', false, [0, 0, 0, 1]);
         this.denial.forceTick();
         this.add.image(0,0,'blueFilter').setOrigin(0,0).setScrollFactor(0);
+        this.topStrip = this.add.image(0,64,'blackStrip').setOrigin(0).setScrollFactor(0);
+        this.botStrip = this.add.image(0,880,'blackStrip').setOrigin(0).setScrollFactor(0);
         this.musicScene.jukebox.stop();
         console.log(this.musicScene.videoBG);
         this.musicScene.videoBG.setPaused();
@@ -62,7 +63,7 @@ class L1_5 extends levelScene {
     }
 
     step3() {
-        this.cameras.main.pan(this.denial.x, this.denial.y, 5000, 'Sine.easeInOut');
+        this.cameras.main.pan(this.denial.body.x, this.denial.body.y, 5000, 'Sine.easeInOut');
         this.time.addEvent({ delay: 5000, callbackScope: this, callback: this.step4 });
     }
 
@@ -74,6 +75,8 @@ class L1_5 extends levelScene {
         this.musicScene.jukebox.start();
         this.musicScene.videoBG.play();
         this.musicScene.videoBG.seekTo(0);
+        this.topStrip.y = -64;
+        this.botStrip.y = -64;
         this.musicScene.seenCinematic1_5 = true;
         this.musicScene.playingCinematic1_5 = false;
 
@@ -95,7 +98,14 @@ class L1_5 extends levelScene {
             // console.log('update')
 
             this.standardUpdate(time, delta);
+            // this.denial.body.x = this.denial.x0;
+            // this.denial.body.y = this.denial.y0;
+
+            console.log(this.denial.y- this.denial.body.y);
+            // console.log(this.denial.beam.y);
         }
+
+        
     }
 
 }
