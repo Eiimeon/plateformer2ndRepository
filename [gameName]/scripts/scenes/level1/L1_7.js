@@ -40,8 +40,8 @@ class L1_7 extends levelScene {
         this.add.image(0, 0, 'blueFilter').setOrigin(0).setScrollFactor(0);
         
         this.physics.add.overlap(this.player, this.denialTriggers0, () => {
-            this.denial.x0 = this.denialSpawns[0].x;
-            this.denial.y0 = this.denialSpawns[0].y;
+            // this.denial.x0 = this.denialSpawns[0].x;
+            // this.denial.y0 = this.denialSpawns[0].y;
             this.denial.initialFlip = false;
             // console.log(this.denial.x);
         })

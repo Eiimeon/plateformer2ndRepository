@@ -63,7 +63,7 @@ class L1_5 extends levelScene {
     }
 
     step3() {
-        this.cameras.main.pan(this.denial.body.x, this.denial.body.y, 5000, 'Sine.easeInOut');
+        this.cameras.main.pan(this.denial.x0+32, this.denial.y0+160, 5000, 'Sine.easeInOut');
         this.time.addEvent({ delay: 5000, callbackScope: this, callback: this.step4 });
     }
 

@@ -58,7 +58,6 @@ class L1_8 extends levelScene {
         if (!this.musicScene.seenCinematic1_8) {
 
             var topStrip = this.add.image(0, 64, 'blackStrip').setOrigin(0).setScrollFactor(0);
-
             var botStrip = this.add.image(0, 880, 'blackStrip').setOrigin(0).setScrollFactor(0);
 
 
@@ -66,18 +65,22 @@ class L1_8 extends levelScene {
             console.log(this.denialSpawns[0]);
             this.denial = new Denial(this, this.denialSpawns[0].x, this.denialSpawns[0].y, 'denial', false, [0, 0, 0, 0]);
 
+            this.add.image(0, 0, 'blueFilter').setOrigin(0).setScrollFactor(0);
+
             for (let i = 0; i < 4; i++) {
                 this.p4[i].plat.setCollisionByExclusion(-1, true);
                 this.physics.add.collider(this.denial, this.p4[i].plat);
             }
 
-            this.cameras.main.startFollow(this.denial);
+            this.cameras.main.startFollow(this.denial).setFollowOffset(0,-3*64);
 
             this.bD = 1000 * 60 / 115; // beat duration
             this.currStep = 0;
 
             this.runInput = 'immobile';
             this.jumpInput = 'held';
+            this.denialOnGround = false; // Indiquera qu'il faut animer la marche lorsque que Denial passera en 0g
+
 
             // denial jump
             this.time.addEvent({
@@ -170,10 +173,12 @@ class L1_8 extends levelScene {
                                                                                                 delay: 2 * this.bD / 2, callbackScope: this, callback: function () {
                                                                                                     this.runInput = 'left';
                                                                                                     this.denial.setGravityY(-g);
+                                                                                                    this.denialOnGround = true;
                                                                                                     this.time.addEvent({
                                                                                                         delay: 14 * this.bD / 2, callbackScope: this, callback: function () {
                                                                                                             this.runInput = 'immobile';
                                                                                                             this.cameras.main.startFollow(this.player);
+                                                                                                            this.cameras.main.setFollowOffset(0, -3*64);
                                                                                                             this.player.setVelocityY(0);
                                                                                                             this.player.x = this.denialSpawns[0].x
                                                                                                             this.player.y = this.denialSpawns[0].y - 64 * 3;
@@ -212,7 +217,7 @@ class L1_8 extends levelScene {
 
         this.denial.move(this.runInput);
         this.denial.jump(this.jumpInput);
-        // this.denial.animate(this.runInput,time);
+        this.denial.animate(this.runInput,time);
         if (this.denial.body.velocity.x > 0) {
             this.denial.initialFlip = false;
             this.denial.flipX = false;

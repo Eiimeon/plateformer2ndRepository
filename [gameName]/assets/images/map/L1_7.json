@@ -1643,7 +1643,7 @@
                  "visible":true,
                  "width":64,
                  "x":320,
-                 "y":1280
+                 "y":1216
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -1652,7 +1652,7 @@
          "y":0
         }],
  "nextlayerid":45,
- "nextobjectid":42,
+ "nextobjectid":44,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.8.4",

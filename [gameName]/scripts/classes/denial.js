@@ -1,7 +1,11 @@
 class Denial extends Phaser.Physics.Arcade.Sprite {
 
     constructor(_scene, _x, _y, _key, _flip = false, _beatMap = [1, 1, 1, 1, 0, 0, 0, 0]) {
-        super(_scene, _x, _y, _key);
+        
+        super(_scene, _x - 32, _y - 160, _key);
+
+        this.offsetX = 32;
+        this.offsetY = 160;
 
         _scene.add.existing(this);
         _scene.physics.add.existing(this);
@@ -12,17 +16,17 @@ class Denial extends Phaser.Physics.Arcade.Sprite {
         //this.setSize(350,896);
         //this.setScale(1/7);
 
-        // this.setScale(1 / 4)
-        // this.setSize(64 * 4, 128 * 4);
-        // this.body.setOffset(64 * 4, 2.5 * 4 * 64);
+        this.setScale(1 / 4)
+        this.setSize(64 * 4, 128 * 4);
+        this.body.setOffset(64 * 4, 2.5 * 4 * 64);
 
         this.scene = _scene;
 
         this.map = _beatMap;
         this.initialFlip = _flip;
 
-        this.x0 = _x;
-        this.y0 = _y;
+        this.x0 = _x-32;
+        this.y0 = _y-160;
 
 
         this.on = true;
@@ -42,9 +46,58 @@ class Denial extends Phaser.Physics.Arcade.Sprite {
             }
         });
 
+        this.anims.create({
+            key: 'walk',
+            frames: this.anims.generateFrameNumbers('denialSlimeSheet', { frames: [0, 0, 10, 10] }),
+            frameRate: 8,
+            repeat: -1
+        })
+
+        this.anims.create({
+            key: 'idle',
+            frames: this.anims.generateFrameNumbers('denialSlimeSheet', { frames: [0, 0, 0, 0] }),
+            frameRate: 4,
+            repeat: -1
+        })
+
+        this.anims.create({
+            key: 'jumpUp',
+            frames: this.anims.generateFrameNumbers('denialSlimeSheet', { frames: [1, 2, 3] }),
+            frameRate: 16,
+        })
+
+        this.anims.create({
+            key: 'jumpPeak',
+            frames: this.anims.generateFrameNumbers('denialSlimeSheet', { frames: [4, 5, 6, 7, 8] }),
+            frameRate: 16,
+        })
+
+        this.anims.create({
+            key: 'jumpDown',
+            frames: this.anims.generateFrameNumbers('denialSlimeSheet', { frames: [8] }),
+            frameRate: 16,
+        })
+
+        this.anims.create({
+            key: 'touchGround',
+            frames: this.anims.generateFrameNumbers('denialSlimeSheet', { frames: [9, 9, 9] }),
+            frameRate: 1,
+            repeat: 0
+        })
+        this.anims.create({
+            key: 'die',
+            frames: this.anims.generateFrameNumbers('slimeSheet', { frames: [8] }),
+            frameRate: 1,
+            repeat: 0
+        })
+
+        this.play('idle');
+
         console.log('denial construit');
         console.log(this.x);
         console.log(this.y);
+
+
     }
 
     flipped(flip) {
@@ -91,13 +144,13 @@ class Denial extends Phaser.Physics.Arcade.Sprite {
                 this.setAsFlipped(this.initialFlip);
                 if (this.initialFlip) {
                     this.beam.setOrigin(0, 0);
-                    this.beam.x = this.x + 128;
-                    this.beam.y = this.y;
+                    this.beam.x = this.x + 128 + this.offsetX;
+                    this.beam.y = this.y + this.offsetY;
                 }
                 else {
                     this.beam.setOrigin(1, 0);
-                    this.beam.x = this.x;
-                    this.beam.y = this.y;
+                    this.beam.x = this.x + this.offsetX;
+                    this.beam.y = this.y + this.offsetY;
                 }
             }
             else {
@@ -115,13 +168,13 @@ class Denial extends Phaser.Physics.Arcade.Sprite {
             this.setAsFlipped(this.initialFlip);
             if (this.initialFlip) {
                 this.beam.setOrigin(0, 0);
-                this.beam.x = this.x + 128;
-                this.beam.y = this.y;
+                this.beam.x = this.x + 128 + this.offsetX;
+                this.beam.y = this.y + this.offsetY;
             }
             else {
                 this.beam.setOrigin(1, 0);
-                this.beam.x = this.x;
-                this.beam.y = this.y;
+                this.beam.x = this.x + this.offsetX;
+                this.beam.y = this.y + this.offsetY;
             }
         }
     }
@@ -158,6 +211,46 @@ class Denial extends Phaser.Physics.Arcade.Sprite {
         }
         if (this.body.velocity.y > 600) { // Vitesse terminale
             this.setVelocityY(500);
+        }
+    }
+
+    animate(input, time) {
+        if (!this.body.blocked.down) {
+            this.latestInAirTime = time
+        }
+        if (this.anims.getName() != 'die') {
+            if (this.body.velocity.y == 0) {
+                if (this.body.blocked.down) {
+                    console.log ( 'bloqué') ;
+                    if (time - this.latestInAirTime < 125) {
+                        this.play('touchGround');
+                    }
+                    else if (input != 'immobile') {
+                        if (true) {
+                            this.play('walk', true);
+                        }
+                    }
+                    else {
+                        this.play('idle',true);
+                    }
+                }
+                else if (this.scene.denialOnGround) {
+                    this.play('walk', true);
+                }
+                else {
+                    this.play('jumpPeak');
+                    this.anims.chain('jumpDown');
+                }
+            }
+            else if (this.body.velocity.y == -850) {
+                this.play('jumpUp', true);
+            }
+            else if (this.body.velocity.y > 0) {
+                if (this.anims.getName() != 'jumpPeak') {
+                    this.play('jumpPeak', true);
+                    this.anims.chain('jumpDown');
+                }
+            }
         }
     }
 }
