@@ -21,7 +21,7 @@ class L1_0 extends levelScene {
 
         this.buildLevel(MAP, TILESET);
 
-        this.add.image(3*64-16,3*64+16,'controlsNoFrame').setOrigin(0).setScale(1/3);
+        this.add.image(3*64-16,3*64+2,'controlsNoFrame').setOrigin(0).setScale(1/3);
     }
 
     update(time,delta) {

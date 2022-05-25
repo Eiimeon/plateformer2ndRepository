@@ -25,9 +25,9 @@ class Chara extends Phaser.Physics.Arcade.Sprite {
         // Flags
         this.bumped = false; // Utilisé dans bump,  pour que le nuancier de saut n'affecte pas les rebonds
         this.jumpAllowed = true; // Empêche de pouvoir sauter sur les pêches, false quand on touche un pêche, redevient vrai quand on touche le sol
+        this.jumpKeyReleased = true;
         this.latestJumpTime;
         this.latestInAirTime;
-        this.dashAllowed = true;
         this.dashing = false;
         this.spawnIndex = 0;
         this.dead;
@@ -40,14 +40,14 @@ class Chara extends Phaser.Physics.Arcade.Sprite {
 
         this.anims.create({
             key: 'walk',
-            frames: this.anims.generateFrameNumbers('slimeSheet', { frames: [10,10,0,0] }),
+            frames: this.anims.generateFrameNumbers('slimeSheet', { frames: [10, 10, 0, 0] }),
             frameRate: 8,
             repeat: -1
         })
 
         this.anims.create({
             key: 'idle',
-            frames: this.anims.generateFrameNumbers('slimeSheet', { frames: [0,0,10,10] }),
+            frames: this.anims.generateFrameNumbers('slimeSheet', { frames: [0, 0, 10, 10] }),
             frameRate: 4,
             repeat: -1
         })
@@ -123,19 +123,21 @@ class Chara extends Phaser.Physics.Arcade.Sprite {
 
     // Saut avec nuancier à la MeatBoy, et vitesse terminale pour mieux viser les sauts
     jump(keySpace, cursors, time) {
-        if (this.body.onFloor()) {
+        if (this.body.onFloor() && this.jumpKeyReleased) {
             this.jumpAllowed = true;
         }
-        if ((keySpace.isDown || cursors.up.isDown) && this.jumpAllowed) {
+        if ((keySpace.isDown || cursors.up.isDown) && this.jumpAllowed && this.jumpKeyReleased) {
             this.play('jumpUp', false);
             this.jumpAllowed = false;
+            this.jumpKeyReleased = false;
             this.latestJumpTime = time;
             // console.log(this.latestJumpTime)
             this.setVelocityY(-this.jumpSpeed);
         }
         if (!this.body.blocked.down && !(keySpace.isDown || cursors.up.isDown) && this.body.velocity.y < 0) {
             if (time - this.latestJumpTime > 150) {
-                this.setVelocityY(0); // Si on est pas bumped et qu'on appuie pas sur haut, arrête de monter (nuancier MeatBoy)
+                this.setVelocityY(0);
+                // this.jumpAllowed = true;
             }
         }
 
@@ -164,7 +166,7 @@ class Chara extends Phaser.Physics.Arcade.Sprite {
                         }
                     }
                     else {
-                        this.play('idle',true);
+                        this.play('idle', true);
                     }
                 }
                 else {
@@ -232,9 +234,12 @@ class Chara extends Phaser.Physics.Arcade.Sprite {
 
     restoreAbilities() {
         // console.log(this.anims.getName());
+        console.log(this.jumpAllowed);
         if (this.body.onFloor()) {
-            this.jumpAllowed = true;
-            this.dashAllowed = true;
+            // this.jumpAllowed = true;
+        }
+        if (this.scene.keySpace.isUp) {
+            this.jumpKeyReleased = true;
         }
     }
 }
