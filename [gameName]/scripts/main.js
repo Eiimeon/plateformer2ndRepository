@@ -7,8 +7,8 @@ BOMONT Jérémy (Noé) - ETPA 2021-2022
 ##################################################################################################################################################*/
 const g = 1500;
 // const STARTLEVELKEY = 'L1_6';
-const STARTLEVELINDEX =0;
-const LEVELORDER = ['0','1','2','3','4','5','9','7','8'];
+const STARTLEVELINDEX = 0;
+const LEVELORDER = ['0', '1', '2', '3', '4', '5', '9', '7', '8'];
 const NLEVELS1PARTS = 7;
 
 var config = {
@@ -18,11 +18,11 @@ var config = {
     input: {
         gamepad: true
     },
-    scale : {
-        mode : Phaser.Scale.FIT
+    scale: {
+        mode: Phaser.Scale.FIT
     },
     scene: [
-        //IntroLogos,
+        IntroLogos,
         StartScreen,
         PauseMenu,
         MusicAndData,
@@ -50,4 +50,10 @@ var game = new Phaser.Game(config);
 function restartGame() {
     game.destroy(true);
     game = new Phaser.Game(config);
+}
+
+// Une coube de Lissajou pour l'effet camera FPS respiration
+function lissajousCurve(time) {
+    var delta = Math.PI / 2;
+    return (new Phaser.Math.Vector2(Math.sin(1 * time + delta), Math.sin(2 * time)));
 }

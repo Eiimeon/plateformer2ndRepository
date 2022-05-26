@@ -245,7 +245,6 @@ class levelScene extends Phaser.Scene {
         cam.setFollowOffset(-64, -3*64);
         cam.setBounds(64, 64, map.width * 64 - 128, map.height * 64 - 3 * 64, true, true, true); // Empêche de voir sous le sol notamment
         cam.setZoom(1.2);
-
         this.cameras.main.fadeIn(1000);
 
 

@@ -3,11 +3,11 @@ class StartScreen extends Phaser.Scene {
         super({
             key: 'StartScreen',
         })
-
     }
 
     preload() {
         this.load.image('titleScreen', 'assets/images/titleScreen.png');
+        this.load.image('bras', 'assets/images/bras.png');
         this.load.image('pause', 'assets/images/pause.png');
         this.load.image('controls', 'assets/images/controls.png');
         this.load.image('controlsNoFrame', 'assets/images/controlsNoFrame.png');
@@ -68,6 +68,8 @@ class StartScreen extends Phaser.Scene {
         this.load.image('transparent', 'assets/images/transparent.png');
         this.load.image('beam', 'assets/images/beam.png');
 
+        this.load.audio('rain', 'assets/musiques/rain.mp3');
+
         this.load.audio('happy', 'assets/musiques/happy1.mp3');
         this.load.audio('HP4', 'assets/musiques/HP4.mp3');
         this.load.audio('HP5', 'assets/musiques/HP5.mp3');
@@ -93,14 +95,27 @@ class StartScreen extends Phaser.Scene {
         this.load.audio('moan','assets/musiques/hitHurt.wav');
     }
 
+
+
     create() {
-        this.add.image(0, 0, 'titleScreen').setOrigin(0, 0).setScale(1);
+        this.titleScreen = this.add.image(0, 0, 'titleScreen').setOrigin(0.1, 0.1).setScale(1.3);
+        this.screenPos = new Phaser.Math.Vector2(this.titleScreen.x,this.titleScreen.y)
+        this.bras = this.add.image(0, 0, 'bras').setOrigin(0, 0).setScale(1);
         this.cameras.main.fadeIn(1000);
+        // this.cameras.main.shake(10000,0.00005);
+        this.rain = this.sound.add('rain').setLoop(true).setVolume(0.1).play();
     }
 
-    update() {
+    update(time) {
+
+        var breathingVector = lissajousCurve(time/3000).scale(50);
+        this.screenPos.lerp(breathingVector,0.5);
+        this.titleScreen.x = this.screenPos.x;
+        this.titleScreen.y = this.screenPos.y;
+
         var keySpace = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
         if (keySpace.isDown) {
+            this.sound.stopAll();
             this.scene.start('MusicAndData');
         }
     }

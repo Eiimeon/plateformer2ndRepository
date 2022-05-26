@@ -7,6 +7,7 @@ class MusicObj {
         this.BPM = BPM;
         this.sound = _scene.sound.add(key);
         this.sound.setVolume(0.2);
+        this.pauseOnBlur = false;
     }
 
     //Bfxr
