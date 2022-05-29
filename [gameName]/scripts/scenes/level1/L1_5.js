@@ -89,7 +89,7 @@ class L1_5 extends levelScene {
             this.player.animate(this.cursors);
         }
 
-        if (this.keySpace.isDown && !this.musicScene.seenCinematic1_5 == true && !this.musicScene.playingCinematic1_5 == true) {
+        if ((this.keySpace.isDown || this.cursors.up.isDown) && !this.musicScene.seenCinematic1_5 == true && !this.musicScene.playingCinematic1_5 == true) {
             this.musicScene.playingCinematic1_5 = true;
             this.step2();
         }

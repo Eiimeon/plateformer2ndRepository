@@ -33,17 +33,18 @@ class StartScreen extends Phaser.Scene {
         this.load.spritesheet('runSheet', 'assets/images/runAnimTestSheet.png', { frameWidth: 1000, frameHeight: 1270 });
         this.load.spritesheet('slimeSheet', 'assets/images/chara2ToSpriteSheet.png', { frameWidth: 774, frameHeight: 1554 });
         this.load.spritesheet('denialSlimeSheet', 'assets/images/denialToSpriteSheet.png', { frameWidth: 774, frameHeight: 1554 });
+        this.load.spritesheet('beamSpritesheet', 'assets/images/beamSpritesheet.png', { frameWidth: 6400, frameHeight: 128 });
 
         this.load.image('fond', 'assets/images/protoFond.png');
-        this.load.video('audioVizHappy','assets/videos/audioVizHappyLowD.mp4');
-        this.load.image('videoPlaceholder','assets/images/videoPlaceholder.png');
-        this.load.image('rose','assets/images/levelBGs/rose.png');
+        this.load.video('audioVizHappy', 'assets/videos/audioVizHappyLowD.mp4');
+        this.load.image('videoPlaceholder', 'assets/images/videoPlaceholder.png');
+        this.load.image('rose', 'assets/images/levelBGs/rose.png');
 
 
-        for (let i = 0 ; i<10 ; i++) {
-            if ( i != 6 ) {
-                this.load.image('parallaxL1_'+i, 'assets/images/levelBGs/parallax1_'+i+'.png');
-                this.load.image('parallax2_L1_'+i, 'assets/images/levelBGs/parallax2_1_'+i+'.png');
+        for (let i = 0; i < 10; i++) {
+            if (i != 6) {
+                this.load.image('parallaxL1_' + i, 'assets/images/levelBGs/parallax1_' + i + '.png');
+                this.load.image('parallax2_L1_' + i, 'assets/images/levelBGs/parallax2_1_' + i + '.png');
             }
         }
 
@@ -52,7 +53,7 @@ class StartScreen extends Phaser.Scene {
         this.load.image('blueFilter', 'assets/images/blueFilter.png');
         this.load.image('blackStrip', 'assets/images/blackStrip.png');
 
-        
+
 
 
         this.load.image('bSquare', 'assets/images/bSquare.png');
@@ -91,32 +92,56 @@ class StartScreen extends Phaser.Scene {
 
 
         this.load.audio('denialEntranceSound', 'assets/musiques/denialEntranceSound.mp3');
-        this.load.audio('deathPiano','assets/musiques/deathPiano.mp3');
-        this.load.audio('moan','assets/musiques/hitHurt.wav');
+        this.load.audio('deathPiano', 'assets/musiques/deathPiano.mp3');
+        this.load.audio('moan', 'assets/musiques/hitHurt.wav');
     }
 
 
 
     create() {
         this.titleScreen = this.add.image(0, 0, 'titleScreen').setOrigin(0.1, 0.1).setScale(1.3);
-        this.screenPos = new Phaser.Math.Vector2(this.titleScreen.x,this.titleScreen.y)
-        this.bras = this.add.image(0, 0, 'bras').setOrigin(0, 0).setScale(1);
+        this.screenPos = new Phaser.Math.Vector2(this.titleScreen.x, this.titleScreen.y)
+        this.arms = this.add.image(70, 40, 'bras').setOrigin(0, 0).setScale(1);
+        this.armsInitialPos = new Phaser.Math.Vector2(this.arms.x, this.arms.y)
+        this.armsPos = new Phaser.Math.Vector2(this.arms.x, this.arms.y)
         this.cameras.main.fadeIn(1000);
         // this.cameras.main.shake(10000,0.00005);
         this.rain = this.sound.add('rain').setLoop(true).setVolume(0.1).play();
+
+        this.time.addEvent({
+            delay: 70, loop: true, callbackScope: this, callback: () => {
+                console.log('hand shake')
+                var randomShakeVector = new Phaser.Math.Vector2(Phaser.Math.RandomXY(Phaser.Math.Vector2.ONE, 10*Math.random()));
+                randomShakeVector.add(this.armsInitialPos);
+                this.armsPos.lerp(randomShakeVector, 0.5);
+                this.arms.x = this.armsPos.x;
+                this.arms.y = this.armsPos.y;
+            }
+        })
     }
 
     update(time) {
 
-        var breathingVector = lissajousCurve(time/3000).scale(50);
-        this.screenPos.lerp(breathingVector,0.5);
+        var breathingVector = lissajousCurve(time / 3000).scale(50);
+        this.screenPos.lerp(breathingVector, 0.5);
         this.titleScreen.x = this.screenPos.x;
         this.titleScreen.y = this.screenPos.y;
+
+
+
+
+
 
         var keySpace = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
         if (keySpace.isDown) {
             this.sound.stopAll();
-            this.scene.start('MusicAndData');
+            this.cameras.main.zoomTo(200, 3000, Phaser.Math.Easing.Quadratic.In)
+            this.time.addEvent({
+                delay: 3000, callbackScope: this, callback: () => {
+                    this.scene.start('MusicAndData');
+                }
+            })
+            // this.scene.start('MusicAndData');
         }
     }
 }   

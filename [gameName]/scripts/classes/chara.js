@@ -238,7 +238,7 @@ class Chara extends Phaser.Physics.Arcade.Sprite {
         if (this.body.onFloor()) {
             // this.jumpAllowed = true;
         }
-        if (this.scene.keySpace.isUp) {
+        if (this.scene.keySpace.isUp && this.scene.cursors.up.isUp) {
             this.jumpKeyReleased = true;
         }
     }

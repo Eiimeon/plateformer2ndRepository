@@ -36,6 +36,11 @@ class Denial extends Phaser.Physics.Arcade.Sprite {
         _scene.physics.add.existing(this.beam);
         this.beam.setGravityY(-g);
         this.beam.setSize(6400,64);
+        this.beam.anims.create({
+            key: 'beamAnim',
+            frames: this.anims.generateFrameNumbers('beamSpritesheet', { frames: [0,1,2,3] }),
+            frameRate: 16
+        })
 
         console.log(this.beam);
 
@@ -141,6 +146,7 @@ class Denial extends Phaser.Physics.Arcade.Sprite {
     denialTick(BC) {
         if (this.on) {
             var reducedBC = BC % this.map.length;
+            this.beam.play('beamAnim');
             if (this.map[reducedBC] == 1) {
                 this.setAsFlipped(this.initialFlip);
                 if (this.initialFlip) {
@@ -166,6 +172,7 @@ class Denial extends Phaser.Physics.Arcade.Sprite {
         // this.x = this.x0;
         // this.y = this.y0;
         if (this.on) {
+            this.beam.play('beamAnim');
             this.setAsFlipped(this.initialFlip);
             if (this.initialFlip) {
                 this.beam.setOrigin(0, 0);

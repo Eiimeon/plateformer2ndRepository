@@ -581,7 +581,7 @@
   </layer>
  </group>
  <objectgroup id="39" name="spawns">
-  <object id="9" x="192" y="768"/>
+  <object id="9" x="186" y="768"/>
  </objectgroup>
  <objectgroup id="40" name="portals">
   <object id="10" gid="216" x="1824.75" y="448" width="64" height="64"/>
