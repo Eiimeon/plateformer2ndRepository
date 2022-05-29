@@ -110,7 +110,6 @@ class StartScreen extends Phaser.Scene {
 
         this.time.addEvent({
             delay: 70, loop: true, callbackScope: this, callback: () => {
-                console.log('hand shake')
                 var randomShakeVector = new Phaser.Math.Vector2(Phaser.Math.RandomXY(Phaser.Math.Vector2.ONE, 10*Math.random()));
                 randomShakeVector.add(this.armsInitialPos);
                 this.armsPos.lerp(randomShakeVector, 0.5);
@@ -135,10 +134,13 @@ class StartScreen extends Phaser.Scene {
         var keySpace = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
         if (keySpace.isDown) {
             this.sound.stopAll();
-            this.cameras.main.zoomTo(200, 3000, Phaser.Math.Easing.Quadratic.In)
+            this.scene.run('MusicAndData');
+            this.cameras.main.zoomTo(200, 3000, Phaser.Math.Easing.Quadratic.In);
+            this.scene.run('MusicAndData');
+
             this.time.addEvent({
                 delay: 3000, callbackScope: this, callback: () => {
-                    this.scene.start('MusicAndData');
+                    this.scene.stop();
                 }
             })
             // this.scene.start('MusicAndData');

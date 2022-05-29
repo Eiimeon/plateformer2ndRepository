@@ -55,45 +55,48 @@ class JukeBox {
     tick(internal) {
         // console.log(this.currMusic.key);
         // console.log(this.beatCount)
-        for (let i = 0; i < 4; i++) {
-            this.levelScene.p4[i].tick3(this.beatCount);
-        }
+        try {
+            for (let i = 0; i < 4; i++) {
+                this.levelScene.p4[i].tick3(this.beatCount);
+            }
 
-        for (let i = 0; i < 4; i++) {
-            this.levelScene.db4[i].tick3(this.beatCount);
-        }
+            for (let i = 0; i < 4; i++) {
+                this.levelScene.db4[i].tick3(this.beatCount);
+            }
 
-        for (let i = 0; i < 8; i++) {
-            this.levelScene.p8[i].tick3(this.beatCount);
-        }
+            for (let i = 0; i < 8; i++) {
+                this.levelScene.p8[i].tick3(this.beatCount);
+            }
 
-        for (let i = 0; i < 8; i++) {
-            this.levelScene.db8[i].tick3(this.beatCount);
-        }
+            for (let i = 0; i < 8; i++) {
+                this.levelScene.db8[i].tick3(this.beatCount);
+            }
 
-        this.levelScene.p4overlap.forEach(layer => {
-            layer.forEach(rythmPlat => {
-                rythmPlat.tick3(this.beatCount);
+            this.levelScene.p4overlap.forEach(layer => {
+                layer.forEach(rythmPlat => {
+                    rythmPlat.tick3(this.beatCount);
+                })
             })
-        })
 
-        this.levelScene.db4overlap.forEach(layer => {
-            layer.forEach(rythmPlat => {
-                rythmPlat.tick3(this.beatCount);
+            this.levelScene.db4overlap.forEach(layer => {
+                layer.forEach(rythmPlat => {
+                    rythmPlat.tick3(this.beatCount);
+                })
             })
-        })
 
-        this.levelScene.p8overlap.forEach(layer => {
-            layer.forEach(rythmPlat => {
-                rythmPlat.tick3(this.beatCount);
+            this.levelScene.p8overlap.forEach(layer => {
+                layer.forEach(rythmPlat => {
+                    rythmPlat.tick3(this.beatCount);
+                })
             })
-        })
 
-        this.levelScene.db8overlap.forEach(layer => {
-            layer.forEach(rythmPlat => {
-                rythmPlat.tick3(this.beatCount);
+            this.levelScene.db8overlap.forEach(layer => {
+                layer.forEach(rythmPlat => {
+                    rythmPlat.tick3(this.beatCount);
+                })
             })
-        })
+        }
+        catch (error) { console.log(error);}
 
         if (this.currMusicBeatCount == this.currMusic.beatLength && internal) {
             this.sequenceIndex += 1;
@@ -106,27 +109,20 @@ class JukeBox {
         // this.musicScene.videoBG.setCurrentTime((60/115)*(this.beatCount%(40*4)));
 
         try { this.levelScene.denial.denialTick(this.beatCount); }
-        catch (error) { /*console.log(error);*/}
+        catch (error) { /*console.log(error);*/ }
     }
 
     start(key) {
-        if (this.on == false && this.levelScene != null) {
+        if (this.on == false) {
             this.on = true;
             this.currMusic = this._music[0];
             //console.log(this._music[0]) ;
 
             this.currMusic.play();
 
-            //préparation de l'igt
-            this.oneSec = this.musicScene.time.addEvent({
-                delay: 1000, loop: true, callbackScope: this, callback: function () {
-                    this.globalTime += 1;
-                }
-            });
-
             // Main timer
             this.timer = this.musicScene.time.addEvent({
-                delay: (1000 * 60) / 115, loop: true, callbackScope: this, callback: function() {
+                delay: (1000 * 60) / 115, loop: true, callbackScope: this, callback: function () {
                     this.tick(true);
                     this.beatCount += 1;
                     this.currMusicBeatCount += 1;
@@ -143,7 +139,7 @@ class JukeBox {
         this.sequenceIndex = 0;
         this.currMusic = this._music[0];
         this.on = false;
-        
+
         this.timer.remove();
     }
 }   

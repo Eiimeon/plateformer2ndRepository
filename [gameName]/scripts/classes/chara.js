@@ -234,7 +234,7 @@ class Chara extends Phaser.Physics.Arcade.Sprite {
 
     restoreAbilities() {
         // console.log(this.anims.getName());
-        console.log(this.jumpAllowed);
+        // console.log(this.jumpAllowed);
         if (this.body.onFloor()) {
             // this.jumpAllowed = true;
         }

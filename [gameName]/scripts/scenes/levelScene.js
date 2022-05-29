@@ -242,7 +242,7 @@ class levelScene extends Phaser.Scene {
         // Camera
         var cam = this.cameras.main;
         cam.startFollow(this.player);
-        cam.setFollowOffset(-64, -3*64);
+        cam.setFollowOffset(-64, -3 * 64);
         cam.setBounds(64, 64, map.width * 64 - 128, map.height * 64 - 3 * 64, true, true, true); // Empêche de voir sous le sol notamment
         cam.setZoom(1.2);
         this.cameras.main.fadeIn(1000);
@@ -257,7 +257,9 @@ class levelScene extends Phaser.Scene {
         this.keyP = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.P);
 
         // this.musicScene.jukebox.start();
-        this.musicScene.jukebox.tick(false);
+        console.log(this.musicScene.jukebox);
+        try {this.musicScene.jukebox.tick(false);}
+        catch(error) {};
     }
 
     standardUpdate(time, delta) {
@@ -294,8 +296,10 @@ class levelScene extends Phaser.Scene {
 
     init(_musicScene) {
         this.musicScene = _musicScene;
-        this.musicScene.jukebox.setLevelScene(this);
-        this.musicScene.levelScene = this;
+        console.log(this.musicScene.jukebox);
+        // this.musicScene.levelScene = this;
+        // this.musicScene.jukebox.levelScene = this;
+
         console.log('Nouvelle scene : ' + this.scene.key);
     }
 
