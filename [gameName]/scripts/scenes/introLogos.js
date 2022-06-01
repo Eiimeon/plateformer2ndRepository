@@ -1,3 +1,8 @@
+/*##################################################################################################################################################
+Classe : IntroLogos
+
+La première scène. Elle montre les logos, avec des effets de camera, puis lance lance l'écran titre
+##################################################################################################################################################*/
 class IntroLogos extends Phaser.Scene {
     constructor() {
         super({
@@ -7,12 +12,13 @@ class IntroLogos extends Phaser.Scene {
     }
 
     preload() {
-        this.load.image('sojuXEtpa', 'assets/images/sojuXEtpa.png')
+        this.load.image('eimeonXEtpa', 'assets/images/eimeonXEtpa.png')
     }
 
     create() {
-        this.add.image(0, 0, 'sojuXEtpa').setOrigin(0, 0).setScale(1);
+        this.add.image(0, 0, 'eimeonXEtpa').setOrigin(0, 0).setScale(1);
 
+        // Fade in 4s → wait 2s → fade out 2s → StartScreen
         this.cameras.main.fadeIn(4000);
 
         this.cameras.main.once('camerafadeincomplete', (camera) => {

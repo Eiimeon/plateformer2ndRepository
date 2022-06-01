@@ -1,3 +1,9 @@
+/*##################################################################################################################################################
+Classe : L1_2
+
+Une scène de niveau. Elle hérite de levelScene.
+Ainsi, elle est sur une base extrêmement standardisée. Mais il peut y avoir des ajouts spécifiques
+##################################################################################################################################################*/
 class L1_2 extends levelScene {
 
     constructor() {

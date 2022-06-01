@@ -1,5 +1,12 @@
+/*##################################################################################################################################################
+Classe : RythmeMover
+
+Un des scripts de déplacement d'objets en rythme. Celui ci fait bouger un objet qui existe, contrairement aux objets rythmplat qui se font bouger eux mêmes
+On appelera par abus l'objet déplacé par le rythm mover une rythmplat. Dans les faits les rythmMovers agissent sur des layers de plateformes.
+##################################################################################################################################################*/
 class RythmMover {
 
+    // Requiert l'objet à déplacer 
     constructor(rythmPlat, beatMap = [1]) {
         this.plat = rythmPlat;
         //console.log(this.plat);
@@ -7,6 +14,8 @@ class RythmMover {
 
     }
 
+    // La méthode qui fait bouger. 3 est un artéfact
+    // BC est est le beatcount du jukebox
     tick3(BC) {
         var reducedBC = BC % this.map.length;
 
@@ -19,11 +28,5 @@ class RythmMover {
             //console.log('beatOut') ;
             this.plat.x = - 6400;
         }
-        //console.log('Player : ' + this.player.x + ' , ' + this.player.y ) ;
-        //console.log('Player : ' + this.plat.x + ' , ' + this.plat.y ) ;
-        //console.log((this.player.x > this.plat.x * 64 + 16) && (this.player.x < this.plat.x*64 -16) && (this.player.y > this.plat.y * 64 + 16) && (this.player.y < this.plat.y*64 -16)) ;
-        /*if ((this.plat.x > this.player.x * 64 + 16) && (this.player.x < this.plat.x * 64 - 16) && (this.player.y > this.plat.y * 64 + 16) && (this.player.y < this.plat.y * 64 - 16)) {
-            this.player.die();
-        }*/
     }
 }

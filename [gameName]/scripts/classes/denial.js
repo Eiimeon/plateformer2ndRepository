@@ -1,36 +1,38 @@
+/*##################################################################################################################################################
+Classe : Denial
+
+Le corps physique de l'antagoniste
+A l'effigie de la petite soeur du protagoniste
+##################################################################################################################################################*/
 class Denial extends Phaser.Physics.Arcade.Sprite {
 
+    // Un sprite qui nécessite une information de flip initial et une beatMap 
     constructor(_scene, _x, _y, _key, _flip = false, _beatMap = [1, 1, 1, 1, 0, 0, 0, 0]) {
-        
+        // Les offsets sont des ajustements pour compenser des soucis au moment du scaling
         super(_scene, _x - 32, _y - 160, _key);
-
         this.offsetX = 32;
         this.offsetY = 160;
-
         _scene.add.existing(this);
         _scene.physics.add.existing(this);
-        this.body.setImmovable(true);
-        //this.body.setGravity(0, -g);
-        this.setOrigin(0, 0);
-        // this.setSize(64, 128);
-        //this.setSize(350,896);
-        //this.setScale(1/7);
 
+        // Mêmes dimensions que le chara
+        this.body.setImmovable(true);
+        this.setOrigin(0, 0);
         this.setScale(1 / 4)
         this.setSize(64 * 4, 128 * 4);
         this.body.setOffset(64 * 4, 2.5 * 4 * 64);
 
+        // On garde la scène, la beatMap, le flip, et les coordonnées de spawn en mémoire
         this.scene = _scene;
-
         this.map = _beatMap;
         this.initialFlip = _flip;
-
         this.x0 = _x-32;
         this.y0 = _y-160;
 
-
+        // Dit si l'objet est allumé, conditionne le tir de lasers
         this.on = true;
 
+        // Le denial arrive avec son laser. C'est un sprite animé qui ne peut pas tomber.
         this.beam = new Phaser.Physics.Arcade.Sprite(_scene, 0, 0, 'beam').setOrigin(0, 0);
         _scene.add.existing(this.beam);
         _scene.physics.add.existing(this.beam);
@@ -42,15 +44,18 @@ class Denial extends Phaser.Physics.Arcade.Sprite {
             frameRate: 16
         })
 
-        console.log(this.beam);
-
-        this.scene.physics.add.collider(this, this.scene.platforms);
+        // Le denial ne traverse pas le sol
+        this.scene.physics.add.collider(this, this.scene.platforms); 
+        // Le laser tue le player au contact
         this.scene.physics.add.overlap(this.beam, this.scene.player, () => {
             if (this.on) {
                 this.scene.player.die();
-                this.stop();
+                this.stop(); // Empêche le laser de tuer à chaque frame
             }
         });
+
+
+        // Le denial peut potetiellement utiliser toutes les animations du chara, et joue l'idle par défaut
 
         this.anims.create({
             key: 'walk',
@@ -99,32 +104,22 @@ class Denial extends Phaser.Physics.Arcade.Sprite {
 
         this.play('idle');
 
-        console.log('denial construit');
-        console.log(this.x);
-        console.log(this.y);
-
-
+        console.log('Denial construit');
     }
 
-    flipped(flip) {
-        return (flip - 1) ** 2;
-    }
-
-    flip() {
-        this.flipX = this.flipped(this.flip);
-    }
-
+    // Set le flip de l'objet à l'opposé du flip donné
     setAsFlipped(flip) {
         this.flipX = (flip - 1) ** 2;
     }
 
+    // Le denial s'éteint, et s'en va, mais son laser reste en place
     stop() {
         this.on = false;
         this.y = -64;
-        //        this.beam.y = -64;
         this.setGravityY(-g);
     }
 
+    // Le denial s'éteint, et son laser part avec lui
     kill() {
         this.on = false;
         this.y = -64;
@@ -132,22 +127,22 @@ class Denial extends Phaser.Physics.Arcade.Sprite {
         this.setGravityY(-g);
     }
 
+    // Le denial se rallume et se remet en position
     restart() {
         this.on = true;
         this.y = this.y0;
         this.x = this.x0;
         this.beam.y = -64;
         this.setGravityY(0);
-        console.log(this.x);
-        console.log(this.y);
-
     }
 
+    // Décléché par la jukebox à chaque battement de métronome 
     denialTick(BC) {
         if (this.on) {
             var reducedBC = BC % this.map.length;
             this.beam.play('beamAnim');
-            if (this.map[reducedBC] == 1) {
+            if (this.map[reducedBC] == 1) {  // Si le beat tombe sur un 1 de la beatmap
+                // Denial se retourne (par rapport à son flip initial) et tire le laser du bon coté
                 this.setAsFlipped(this.initialFlip);
                 if (this.initialFlip) {
                     this.beam.setOrigin(0, 0);
@@ -160,7 +155,7 @@ class Denial extends Phaser.Physics.Arcade.Sprite {
                     this.beam.y = this.y + this.offsetY-32;
                 }
             }
-            else {
+            else { // Sinon elle reprend son orientation initiale et le laser s'en va
                 this.setAsFlipped(!this.initialFlip);
                 this.beam.x = 0;
                 this.beam.y = 0;
@@ -168,9 +163,8 @@ class Denial extends Phaser.Physics.Arcade.Sprite {
         }
     }
 
+    // Permet de tirer un coup de rayon sans passer par le jukebox, identique à tick sans les conditions
     forceTick() {
-        // this.x = this.x0;
-        // this.y = this.y0;
         if (this.on) {
             this.beam.play('beamAnim');
             this.setAsFlipped(this.initialFlip);
@@ -188,6 +182,7 @@ class Denial extends Phaser.Physics.Arcade.Sprite {
     }
 
     // ### Déplacements pour cinématiques ###
+    // Le denial peut de déplacer avec move en recevant l'argument 'right','left', ou 'immobile' et sauter avec jump en recevant l'argument 'held', ou autre chose 
 
     move(input) {
         switch (input) {
@@ -214,14 +209,17 @@ class Denial extends Phaser.Physics.Arcade.Sprite {
             this.jumpAllowed = false;
             this.setVelocityY(-850);
         }
+        // Nuancier
         if (!this.body.blocked.down && input != 'held' && this.body.velocity.y < 0) {
             this.setVelocityY(0);
         }
-        if (this.body.velocity.y > 600) { // Vitesse terminale
+        // Vitesse terminale
+        if (this.body.velocity.y > 600) { 
             this.setVelocityY(500);
         }
     }
 
+    // animate similaire à celle de chara
     animate(input, time) {
         if (!this.body.blocked.down) {
             this.latestInAirTime = time
